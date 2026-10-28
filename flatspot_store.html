@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlatSpot - The Open Package & CLI Hub</title>
+  <!-- Cayman Theme Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --header-bg-start: #155799;
+      --header-bg-end: #159957;
+      --body-bg: #fcfcfc;
+      --text-main: #606c71;
+      --heading-color: #2b3137;
+      --card-bg: #ffffff;
+      --card-border: #e9ecef;
+      --btn-green: #28a745;
+      --btn-green-hover: #218838;
+      --btn-blue: #159957;
+      --btn-danger: #d9534f;
+      --btn-secondary: #6c757d;
+      --badge-bg: #e1f5fe;
+      --badge-text: #0288d1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--body-bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding-bottom: 80px;
+    }
+
+    /* Classic Cayman Header Gradient */
+    header {
+      background: linear-gradient(120deg, var(--header-bg-start), var(--header-bg-end));
+      color: #ffffff;
+      padding: 3rem 1.5rem 3.5rem 1.5rem;
+      text-align: center;
+      position: relative;
+      box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .project-name {
+      font-size: 3.25rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+    }
+
+    .project-tagline {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+      font-weight: 400;
+    }
+
+    .header-nav {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* Common Button Styling */
+    .btn {
+      display: inline-block;
+      color: rgba(255, 255, 255, 0.85);
+      background-color: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 0.3rem;
+      padding: 0.6rem 1.2rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s, background-color 0.2s, border-color 0.2s;
+    }
+
+    .btn:hover {
+      color: #ffffff;
+      background-color: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Direct Store Actions */
+    .btn-action {
+      background-color: var(--btn-green);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      color: #ffffff !important;
+    }
+    .btn-action:hover {
+      background-color: var(--btn-green-hover);
+    }
+
+    .btn-danger {
+      background-color: var(--btn-danger);
+      border: 1px solid rgba(0,0,0,0.1);
+      color: #ffffff !important;
+    }
+
+    .btn-secondary {
+      background-color: var(--btn-secondary);
+      border: 1px solid rgba(0,0,0,0.1);
+      color: #ffffff !important;
+    }
+
+    /* Main Container */
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+    }
+
+    /* Section Typography */
+    h2 {
+      font-size: 1.8rem;
+      color: var(--heading-color);
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid #eff1f3;
+    }
+
+    /* Grid Layout */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Card Aesthetic */
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.8rem;
+    }
+
+    .card h3 {
+      font-size: 1.25rem;
+      color: var(--heading-color);
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      margin-bottom: 1.2rem;
+      color: var(--text-main);
+      flex-grow: 1;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      background-color: var(--badge-bg);
+      color: var(--badge-text);
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-official {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    /* Moderator Panel */
+    #admin-panel {
+      display: none;
+      background-color: #ffffff;
+      border: 2px dashed var(--header-bg-start);
+      border-radius: 6px;
+      padding: 1.8rem;
+      margin-bottom: 3rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .mod-item {
+      background-color: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 6px;
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .mod-controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .mod-controls select, .mod-controls input[type="text"] {
+      padding: 0.5rem;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal {
+      background: #ffffff;
+      border-radius: 6px;
+      width: 90%;
+      max-width: 500px;
+      padding: 2rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal h3 {
+      color: var(--heading-color);
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--heading-color);
+      margin-bottom: 0.4rem;
+    }
+
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      font-size: 0.95rem;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 1.5rem;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #999;
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cayman Style Gradient Header -->
+  <header>
+    <h1 class="project-name">FlatSpot</h1>
+    <h2 class="project-tagline" style="border:none; padding:0; margin-bottom: 2rem;">The open, unrestricted package & CLI hub for Linux</h2>
+    <div class="header-nav">
+      <button class="btn" onclick="openModal('upload-modal')">Upload App</button>
+      <button class="btn" id="dev-btn" onclick="loginDev()">Dev Dashboard</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Moderator Dashboard Section -->
+    <section id="admin-panel">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2 style="border:none; margin:0; padding:0;">🛡️ Moderator Review Queue</h2>
+        <span id="mod-welcome" class="badge badge-official" style="font-size:0.85rem;"></span>
+      </div>
+      <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">Review submissions below. Approvals require selecting a valid category. Rejections require a clear explanation of at least 5 words.</p>
+      <div id="pending-list"></div>
+    </section>
+
+    <!-- App Store Grid -->
+    <h2>Available Software</h2>
+    <div class="grid" id="store-list">
+      <!-- Direct HTML link for Official CLI Tool -->
+      <div class="card">
+        <div>
+          <div class="card-header">
+            <h3>FlatSpot CLI</h3>
+            <span class="badge badge-official">Official CLI</span>
+          </div>
+          <p>The universal shell manager script for fetching, installing, and executing FlatSpot command-line tools across any Linux distribution.</p>
+        </div>
+        <a href="./flatspot.sh" download="flatspot.sh" class="btn btn-action" style="text-align:center;">Download flatspot.sh</a>
+      </div>
+
+      <!-- Direct HTML link for initial rterm bundle -->
+      <div class="card">
+        <div>
+          <div class="card-header">
+            <h3>rterm</h3>
+            <span class="badge">Console Tools</span>
+          </div>
+          <p>Python-based REPL and package runner environment bundled cleanly into a standalone Flatpak executable.</p>
+        </div>
+        <a href="./apps/rterm.flatpak" download="rterm.flatpak" class="btn btn-action" style="text-align:center;">Download .flatpak</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    FlatSpot Directory &bull; Built for open Linux distribution
+  </footer>
+
+  <!-- File Upload Modal -->
+  <div class="modal-overlay" id="upload-modal">
+    <div class="modal">
+      <h3>Submit Software to FlatSpot</h3>
+      <form id="upload-form" onsubmit="submitApp(event)">
+        <div class="form-group">
+          <label for="app-name">Application Name</label>
+          <input type="text" id="app-name" required placeholder="e.g. MyTool">
+        </div>
+        <div class="form-group">
+          <label for="app-desc">Description</label>
+          <textarea id="app-desc" rows="3" required placeholder="Brief description of your console software or flatpak..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="app-file">Software File (.flatpak or .sh)</label>
+          <input type="file" id="app-file" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('upload-modal')">Cancel</button>
+          <button type="submit" class="btn btn-action">Submit for Review</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Valid 8-digit access codes
+    const MOD_CODES = {
+      "19041459": "Rocco",
+      "starfish": "Cody"
+    };
+
+    let currentUser = null;
+    let pendingApps = [];
+    let approvedApps = [];
+
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    // Handle user app submission
+    function submitApp(e) {
+      e.preventDefault();
+      const name = document.getElementById('app-name').value.trim();
+      const desc = document.getElementById('app-desc').value.trim();
+      const fileInput = document.getElementById('app-file');
+      const file = fileInput.files[0];
+
+      if (!file) return;
+
+      // Generate a session Blob URL so user uploads can actually be downloaded immediately!
+      const downloadUrl = URL.createObjectURL(file);
+
+      const newApp = {
+        id: Date.now(),
+        name: name,
+        desc: desc,
+        fileName: file.name,
+        downloadUrl: downloadUrl
+      };
+
+      pendingApps.push(newApp);
+      alert(`"${name}" has been submitted for review!`);
+      document.getElementById('upload-form').reset();
+      closeModal('upload-modal');
+      renderModQueue();
+    }
+
+    // Handle Dev Dashboard Login
+    function loginDev() {
+      if (currentUser) {
+        currentUser = null;
+        document.getElementById('admin-panel').style.display = 'none';
+        document.getElementById('dev-btn').innerText = 'Dev Dashboard';
+        return;
+      }
+
+      const code = prompt("Enter 8-digit Developer / Moderator Access Code:");
+      if (code === null) return; // User cancelled prompt
+
+      if (MOD_CODES[code]) {
+        currentUser = MOD_CODES[code];
+        document.getElementById('admin-panel').style.display = 'block';
+        document.getElementById('mod-welcome').innerText = `Logged in: ${currentUser}`;
+        document.getElementById('dev-btn').innerText = 'Log Out';
+        renderModQueue();
+      } else {
+        alert("Invalid Access Code!");
+      }
+    }
+
+    // Render Moderator Queue
+    function renderModQueue() {
+      const queueContainer = document.getElementById('pending-list');
+      if (!queueContainer) return;
+      
+      queueContainer.innerHTML = '';
+
+      if (pendingApps.length === 0) {
+        queueContainer.innerHTML = '<p style="color: #888;">No submissions currently waiting for review.</p>';
+        return;
+      }
+
+      pendingApps.forEach((app, index) => {
+        const item = document.createElement('div');
+        item.className = 'mod-item';
+        item.innerHTML = `
+          <h3 style="font-size:1.1rem; color: var(--heading-color);">${escapeHtml(app.name)} <small style="font-size: 0.8rem; color: #888;">(${escapeHtml(app.fileName)})</small></h3>
+          <p style="font-size:0.9rem; margin: 0.4rem 0;">${escapeHtml(app.desc)}</p>
+          
+          <div class="mod-controls">
+            <select id="cat-${app.id}">
+              <option value="">-- Select Category --</option>
+              <option value="Console Tools">Console Tools</option>
+              <option value="Games">Games</option>
+              <option value="Utilities">Utilities</option>
+              <option value="System">System</option>
+            </select>
+            <button class="btn btn-action" onclick="approveApp(${index}, ${app.id})">YES (Approve)</button>
+
+            <input type="text" id="reason-${app.id}" placeholder="Reason for rejection (min 5 words)..." style="flex-grow:1; min-width: 220px;">
+            <button class="btn btn-danger" onclick="rejectApp(${index}, ${app.id})">NO (Reject)</button>
+          </div>
+        `;
+        queueContainer.appendChild(item);
+      });
+    }
+
+    // Approve Logic
+    function approveApp(index, appId) {
+      const catSelect = document.getElementById(`cat-${appId}`);
+      const category = catSelect.value;
+
+      if (!category) {
+        alert("Please select a category before approving!");
+        return;
+      }
+
+      const app = pendingApps.splice(index, 1)[0];
+      app.category = category;
+      approvedApps.push(app);
+
+      renderModQueue();
+      renderStore();
+    }
+
+    // Reject Logic
+    function rejectApp(index, appId) {
+      const reasonInput = document.getElementById(`reason-${appId}`);
+      const reason = reasonInput.value.trim();
+
+      // Enforce at least 5 words requirement
+      const wordCount = reason.split(/\s+/).filter(word => word.length > 0).length;
+
+      if (wordCount < 5) {
+        alert(`Rejection reason must be at least 5 words long! (Currently ${wordCount} words)`);
+        return;
+      }
+
+      const app = pendingApps.splice(index, 1)[0];
+      alert(`Rejected "${app.name}". Reason logged: "${reason}"`);
+      renderModQueue();
+    }
+
+    // Render Dynamic Store Items
+    function renderStore() {
+      const storeContainer = document.getElementById('store-list');
+      
+      // Preserve fixed baseline packages
+      storeContainer.innerHTML = `
+        <div class="card">
+          <div>
+            <div class="card-header">
+              <h3>FlatSpot CLI</h3>
+              <span class="badge badge-official">Official CLI</span>
+            </div>
+            <p>The universal shell manager script for fetching, installing, and executing FlatSpot command-line tools across any Linux distribution.</p>
+          </div>
+          <a href="./flatspot.sh" download="flatspot.sh" class="btn btn-action" style="text-align:center;">Download flatspot.sh</a>
+        </div>
+
+        <div class="card">
+          <div>
+            <div class="card-header">
+              <h3>rterm</h3>
+              <span class="badge">Console Tools</span>
+            </div>
+            <p>Python-based REPL and package runner environment bundled cleanly into a standalone Flatpak executable.</p>
+          </div>
+          <a href="./apps/rterm.flatpak" download="rterm.flatpak" class="btn btn-action" style="text-align:center;">Download .flatpak</a>
+        </div>
+      `;
+
+      // Render dynamically approved items with live functional download links
+      approvedApps.forEach(app => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div>
+            <div class="card-header">
+              <h3>${escapeHtml(app.name)}</h3>
+              <span class="badge">${escapeHtml(app.category)}</span>
+            </div>
+            <p>${escapeHtml(app.desc)}</p>
+          </div>
+          <a href="${app.downloadUrl}" download="${escapeHtml(app.fileName)}" class="btn btn-action" style="text-align:center;">Download ${escapeHtml(app.fileName)}</a>
+        `;
+        storeContainer.appendChild(card);
+      });
+    }
+
+    // Simple helper to prevent HTML injection
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>
